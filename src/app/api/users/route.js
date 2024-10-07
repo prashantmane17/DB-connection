@@ -1,38 +1,30 @@
 import { connectDb } from "@/helper/db";
+import { User } from "@/models/user";
 import { NextResponse } from "next/server";
 
 connectDb();
 
-export function GET(request) {
+export async function GET(request) {
+    try {
+      const users = await User.find();
+      return NextResponse.json(users);
+    } catch (error) {
+      return NextResponse.json(
+        { success: false, error: error.message },
+        { status: 500 }
+      );
+    }
+  }
 
-    const users = [
-        {
-            name: 'durgesh',
-            phone: '8473847384',
-            course: 'java',
-        },
-        {
-            name: 'Prash',
-            phone: '8473847384',
-            course: 'next',
-        },
-        {
-            name: 'rohan',
-            phone: '8473847384',
-            course: 'js',
-        },
-    ];
 
-    return NextResponse.json(users)
-
-}
-
-export function POST() {
-
-}
-export function PUT() {
-
-}
-export function DELETE() {
-
+export async function POST(request) {
+    try {
+        const { name, email, password, mobileNum } = await request.json();
+        const newUser = new User({ name, email, password, mobileNum });
+        await newUser.save();
+        return NextResponse.json({ success: true, user: newUser });
+        
+    } catch (error) {
+        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    }
 }
