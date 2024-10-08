@@ -5,9 +5,9 @@ export const connectDb = async () => {
             dbName: 'work_manager',
         });
         console.log("db connect...");
-        console.log("con " + connection.host)
+        console.log("con " + connection.host);
     }
     catch (error) {
-        console.l; og("failed connection")
+        console.log("failed connection");
     }
 }
